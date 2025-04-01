@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using ApiDDD.Data.Context;
+using ApiDDD.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using SalesAPI.Application.Services;
+using SalesAPI.Domain.Repositories;
+using SalesAPI.Infrastructure.Services;
 
 namespace ApiDDD.Api
 {
@@ -24,6 +25,16 @@ namespace ApiDDD.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiDDD.Api", Version = "v1" });
             });
+
+            // Configuração do SQLite
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly("SalesAPI.Infrastructure")));
+
+            // Registro dos serviços
+            services.AddScoped<ISaleService, SaleService>();
+            services.AddScoped<ISaleRepository, SaleRepository>();
+            services.AddScoped<IEventLogger, EventLogger>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,21 +58,6 @@ namespace ApiDDD.Api
             {
                 endpoints.MapControllers();
             });
-
-
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapHealthChecks("/healthcheck-json", new HealthCheckOptions()
-            //    {
-            //        Predicate = _ => true,
-            //        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            //    });
-            //    endpoints.MapHealthChecksUI(opt =>
-            //    {
-            //        opt.UIPath = "/healthcheck";
-            //    });
-            //    endpoints.MapControllers();
-            //});
 
         }
     }
