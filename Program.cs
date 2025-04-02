@@ -1,45 +1,41 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using ApiDDD.Api.Data;
-using ApiDDD.Data.Context;
-using System;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
+using ApiDDD.Data.Repositories;
+using ApiDDD.Data.Configuration;
+using SalesAPI.Infrastructure.Services;
+using SalesAPI.Application.Services;
+using SalesAPI.Domain.Repositories;
+using SalesAPI.Domain.Events;
 
-namespace ApiDDD.Api
+var builder = WebApplication.CreateBuilder(args);
+
+// Configure MongoDB
+MongoDbConfiguration.Configure();
+
+// Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var host = CreateHostBuilder(args).Build();
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "ApiDDD.Api", Version = "v1" });
+});
 
-            // Configura o banco de dados e executa as migrações
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                try
-                {
-                    var context = services.GetRequiredService<ApplicationDbContext>();
-                    context.Database.Migrate();
-                    SeedData.Initialize(services);
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "Ocorreu um erro ao configurar o banco de dados.");
-                }
-            }
+// Register services
+builder.Services.AddScoped<ISaleService, SaleService>();
+builder.Services.AddScoped<ISaleRepository, SaleRepository>();
+builder.Services.AddScoped<IEventLogger, EventLogger>();
 
-            host.Run();
-        }
+var app = builder.Build();
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiDDD.Api v1"));
 }
+
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();
