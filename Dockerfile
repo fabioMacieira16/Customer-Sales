@@ -1,23 +1,22 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["ApiDDD.Api/SalesAPI.Api.csproj", "ApiDDD.Api/"]
-COPY ["ApiDDD.Application/SalesAPI.Application.csproj", "ApiDDD.Application/"]
-COPY ["ApiDDD.Data/SalesAPI.Infrastructure.csproj", "ApiDDD.Data/"]
-COPY ["ApiDDD.Domain/SalesAPI.Domain.csproj", "ApiDDD.Domain/"]
-RUN dotnet restore "ApiDDD.Api/SalesAPI.Api.csproj"
+
+# Copy csproj and restore dependencies
+COPY ["ApiDDD.Api/ApiDDD.Api.csproj", "ApiDDD.Api/"]
+COPY ["ApiDDD.Domain/ApiDDD.Domain.csproj", "ApiDDD.Domain/"]
+COPY ["ApiDDD.Data/ApiDDD.Data.csproj", "ApiDDD.Data/"]
+RUN dotnet restore "ApiDDD.Api/ApiDDD.Api.csproj"
+
+# Copy everything else and build
 COPY . .
-WORKDIR "/src/ApiDDD.Api"
-RUN dotnet build "SalesAPI.Api.csproj" -c Release -o /app/build
+RUN dotnet build "ApiDDD.Api/ApiDDD.Api.csproj" -c Release -o /app/build
 
+# Publish
 FROM build AS publish
-RUN dotnet publish "SalesAPI.Api.csproj" -c Release -o /app/publish
+RUN dotnet publish "ApiDDD.Api/ApiDDD.Api.csproj" -c Release -o /app/publish
 
-FROM base AS final
+# Final stage/image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SalesAPI.Api.dll"] 
+ENTRYPOINT ["dotnet", "ApiDDD.Api.dll"] 
