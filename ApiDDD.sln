@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalesAPI.Domain", "ApiDDD.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiDDD.Tests", "ApiDDD.Tests\ApiDDD.Tests.csproj", "{45678901-4567-4567-4567-456789012345}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesAPI.Application", "ApiDDD.Application\SalesAPI.Application.csproj", "{E4EABA43-6680-4D47-AFE2-D15048E89E94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{45678901-4567-4567-4567-456789012345}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45678901-4567-4567-4567-456789012345}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45678901-4567-4567-4567-456789012345}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4EABA43-6680-4D47-AFE2-D15048E89E94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4EABA43-6680-4D47-AFE2-D15048E89E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4EABA43-6680-4D47-AFE2-D15048E89E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4EABA43-6680-4D47-AFE2-D15048E89E94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
