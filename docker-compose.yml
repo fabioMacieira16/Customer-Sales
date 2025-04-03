@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: sales_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin123
+    networks:
+      - sales_network
+
+  api:
+    build:
+      context: .
+      dockerfile: ApiDDD.Api/Dockerfile
+    container_name: sales_api
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__MongoDB=mongodb://admin:admin123@mongodb:27017
+    depends_on:
+      - mongodb
+    networks:
+      - sales_network
+
+volumes:
+  mongodb_data:
+
+networks:
+  sales_network:
+    driver: bridge 

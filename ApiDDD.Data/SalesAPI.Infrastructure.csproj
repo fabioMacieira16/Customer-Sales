@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="SQlite\**" />
+	  <EmbeddedResource Remove="SQlite\**" />
+	  <None Remove="SQlite\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Dapper" Version="2.0.123" />
+		<PackageReference Include="EntityFramework" Version="6.4.4" />
+		<PackageReference Include="Microsoft.Data.Sqlite.Core" Version="6.0.27" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.27" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.27" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.27" />
+		<PackageReference Include="MongoDB.Driver" Version="3.3.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\ApiDDD.Application\SalesAPI.Application.csproj" />
+		<ProjectReference Include="..\ApiDDD.Domain\SalesAPI.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
 using SalesAPI.Application.DTOs;
 using SalesAPI.Application.Services;
 
