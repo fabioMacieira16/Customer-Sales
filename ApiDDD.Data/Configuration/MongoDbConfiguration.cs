@@ -16,10 +16,13 @@ namespace ApiDDD.Data.Configuration
             // Configurar convenções
             var pack = new ConventionPack
             {
+                // Usar o nome da classe como prefixo para os campos
                 new CamelCaseElementNameConvention(),
+                //evita erro de campos que não existem no banco de dados
                 new IgnoreExtraElementsConvention(true)
             };
+            // Registrar as convenções
             ConventionRegistry.Register("CustomConventions", pack, t => true);
         }
     }
-} 
+}
